@@ -4,33 +4,235 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Study Tutor</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #0b1020;
+      color: white;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 20px;
+      border-bottom: 1px solid #252d45;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 24px;
+    }
+
+    header p {
+      color: #9ca6bd;
+      margin-top: 6px;
+      font-size: 14px;
+    }
+
+    main {
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .upload-box {
+      border: 2px dashed #3b82f6;
+      border-radius: 16px;
+      padding: 30px 15px;
+      text-align: center;
+      margin-bottom: 20px;
+      background: #11182b;
+    }
+
+    .upload-box h2 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .upload-box p {
+      color: #9ca6bd;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    input[type="file"] {
+      width: 100%;
+    }
+
+    #fileName {
+      margin-top: 12px;
+      color: #60a5fa;
+      font-size: 14px;
+    }
+
+    .chat {
+      background: #11182b;
+      border-radius: 16px;
+      padding: 15px;
+      min-height: 350px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message {
+      padding: 12px 15px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      max-width: 85%;
+      line-height: 1.5;
+    }
+
+    .tutor {
+      background: #1c2740;
+      align-self: flex-start;
+    }
+
+    .user {
+      background: #2563eb;
+      align-self: flex-end;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 15px;
+    }
+
+    #question {
+      flex: 1;
+      padding: 13px;
+      border: 1px solid #303b58;
+      border-radius: 10px;
+      background: #0b1020;
+      color: white;
+      outline: none;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 0 18px;
+      background: #2563eb;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .status {
+      text-align: center;
+      color: #64748b;
+      font-size: 12px;
+      margin-top: 15px;
+    }
+  </style>
 </head>
 
 <body>
-  <h1>📚 Study Tutor</h1>
-  <p>Your AI-powered study assistant.</p>
 
-  <input type="file" id="fileInput" accept=".pdf,.txt">
-  
-  <div id="chat">
-    <p><strong>Tutor:</strong> Upload your study material and ask me anything.</p>
-  </div>
+  <header>
+    <h1>📚 Study Tutor</h1>
+    <p>Your personal AI study assistant</p>
+  </header>
 
-  <input type="text" id="question" placeholder="Ask a question...">
-  <button onclick="askQuestion()">Ask</button>
+  <main>
+
+    <section class="upload-box">
+      <h2>📄 Upload Study Material</h2>
+      <p>Upload your notes or study material.</p>
+
+      <input
+        type="file"
+        id="fileInput"
+        accept=".pdf,.txt,.doc,.docx"
+      >
+
+      <div id="fileName"></div>
+    </section>
+
+    <section class="chat" id="chat">
+
+      <div class="message tutor">
+        👋 Hi! I'm your Study Tutor.<br><br>
+        Upload your study material and ask me a question.
+      </div>
+
+      <div class="input-area">
+        <input
+          type="text"
+          id="question"
+          placeholder="Ask something..."
+          onkeydown="handleEnter(event)"
+        >
+
+        <button onclick="askQuestion()">Ask</button>
+      </div>
+
+    </section>
+
+    <div class="status">
+      AI connection will be added next.
+    </div>
+
+  </main>
 
   <script>
+    const fileInput = document.getElementById("fileInput");
+    const fileName = document.getElementById("fileName");
+
+    fileInput.addEventListener("change", function () {
+      if (this.files.length > 0) {
+        fileName.textContent =
+          "Selected: " + this.files[0].name;
+      }
+    });
+
+    function handleEnter(event) {
+      if (event.key === "Enter") {
+        askQuestion();
+      }
+    }
+
     function askQuestion() {
-      const question = document.getElementById("question").value;
+      const input = document.getElementById("question");
+      const question = input.value.trim();
 
-      if (!question.trim()) return;
+      if (!question) return;
 
-      document.getElementById("chat").innerHTML +=
-        `<p><strong>You:</strong> ${question}</p>
-         <p><strong>Tutor:</strong> AI connection coming next...</p>`;
+      const chat = document.getElementById("chat");
 
-      document.getElementById("question").value = "";
+      const userMessage = document.createElement("div");
+      userMessage.className = "message user";
+      userMessage.textContent = question;
+
+      chat.insertBefore(
+        userMessage,
+        chat.querySelector(".input-area")
+      );
+
+      const tutorMessage = document.createElement("div");
+      tutorMessage.className = "message tutor";
+      tutorMessage.textContent =
+        "I'm ready to answer, but the LongCat-2 AI connection hasn't been connected yet.";
+
+      chat.insertBefore(
+        tutorMessage,
+        chat.querySelector(".input-area")
+      );
+
+      input.value = "";
     }
   </script>
+
 </body>
   </html>
