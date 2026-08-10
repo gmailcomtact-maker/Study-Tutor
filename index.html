@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Tutor</title>
+</head>
+
+<body>
+  <h1>📚 Study Tutor</h1>
+  <p>Your AI-powered study assistant.</p>
+
+  <input type="file" id="fileInput" accept=".pdf,.txt">
+  
+  <div id="chat">
+    <p><strong>Tutor:</strong> Upload your study material and ask me anything.</p>
+  </div>
+
+  <input type="text" id="question" placeholder="Ask a question...">
+  <button onclick="askQuestion()">Ask</button>
+
+  <script>
+    function askQuestion() {
+      const question = document.getElementById("question").value;
+
+      if (!question.trim()) return;
+
+      document.getElementById("chat").innerHTML +=
+        `<p><strong>You:</strong> ${question}</p>
+         <p><strong>Tutor:</strong> AI connection coming next...</p>`;
+
+      document.getElementById("question").value = "";
+    }
+  </script>
+</body>
+  </html>
